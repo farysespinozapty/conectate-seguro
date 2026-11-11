@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conecta Seguro — Aprende a proteger tu red</title>
+<style>
+:root{
+  --bg:#fbfaff;--panel:#ffffff;--panel-soft:#f5f0fc;--line:#e5daf4;
+  --text:#493d5d;--muted:#81758f;--purple:#9b7bd0;--purple-dark:#7655ad;
+  --purple-light:#eee6fa;--good:#4aa77b;--good-bg:#edf8f1;
+  --bad:#c66b83;--bad-bg:#fff0f3;--gold:#c49a4e;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+ background:radial-gradient(circle at 12% 0%,#eee5fb 0,transparent 36%),
+ radial-gradient(circle at 90% 100%,#f1eafb 0,transparent 34%),var(--bg)}
+button{font:inherit}
+.app{max-width:1100px;margin:auto;padding:22px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.brand h1{margin:0;font-size:clamp(1.6rem,4vw,2.25rem);color:var(--purple-dark)}
+.brand p{margin:5px 0 0;color:var(--muted)}
+.stats{display:flex;gap:9px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 14px;min-width:90px;text-align:center;box-shadow:0 5px 15px #70539a0d}
+.stat b{display:block;font-size:1.1rem;color:var(--purple-dark)}
+.stat span{font-size:.73rem;color:var(--muted)}
+.screen{display:none}.screen.active{display:block}
+.panel{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:22px;padding:clamp(17px,3vw,28px);box-shadow:0 15px 40px #6b4b9010}
+.intro{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+.hero{padding:clamp(20px,3vw,32px);border-radius:18px;background:linear-gradient(140deg,#f1eafb,#fff 75%);border:1px solid var(--line)}
+.hero h2{font-size:clamp(1.5rem,4vw,2.15rem);margin:0 0 10px;color:var(--purple-dark)}
+.hero p{line-height:1.65;color:#716580}
+.hero-art{font-size:3.5rem;margin:12px 0}
+.objectives{display:grid;gap:10px;margin-top:15px}
+.objective{display:flex;gap:11px;align-items:flex-start;background:#faf8fd;border:1px solid var(--line);padding:12px;border-radius:13px}
+.objective b{display:block;color:var(--purple-dark);margin-bottom:3px}
+.objective span{font-size:.9rem;color:var(--muted);line-height:1.4}
+.btn{border:0;border-radius:12px;padding:12px 18px;background:linear-gradient(135deg,#ad91df,#8b6bc2);color:#fff;font-weight:800;cursor:pointer;box-shadow:0 6px 15px #9271c22b;transition:.18s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.03)}
+.btn.secondary{background:#f2ecfa;color:#685184;border:1px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.levelbar{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:14px}
+.leveldot{padding:9px 5px;text-align:center;border-radius:11px;background:#fff;color:var(--muted);border:1px solid var(--line);font-size:.78rem}
+.leveldot.active{background:#eee6fa;border-color:#bca6df;color:var(--purple-dark);font-weight:800}
+.leveldot.done{background:var(--good-bg);border-color:#c4e6d1;color:#347d59;font-weight:800}
+.mission-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:15px}
+.mission-head h2{margin:0 0 7px;color:var(--purple-dark)}
+.mission-head p{margin:0;color:var(--muted);line-height:1.55}
+.progress-wrap{margin:14px 0 20px}
+.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem;margin-bottom:6px}
+.progress{height:10px;border-radius:99px;background:#eee8f6;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#c4a9e9,#8f70c5);transition:width .3s}
+.guide{background:#f6f1fc;border:1px solid var(--line);border-left:5px solid var(--purple);padding:13px 15px;border-radius:12px;line-height:1.5;margin:15px 0}
+.guide strong{color:var(--purple-dark)}
+.visual{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,28px);flex-wrap:wrap;background:#fbf9fe;border:1px solid var(--line);border-radius:17px;padding:20px;margin:16px 0}
+.device{width:115px;min-height:105px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;border:1px solid #e1d5f0;background:#fff;border-radius:15px;text-align:center;padding:10px;box-shadow:0 5px 14px #70539a0c}
+.device .emoji{font-size:2rem}.device b{font-size:.9rem}.device small{font-size:.75rem;color:var(--muted)}
+.arrow{font-size:1.6rem;color:#a58acb;font-weight:900}
+.question{font-size:1.12rem;font-weight:800;line-height:1.45;margin:18px 0 12px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.choice{border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--text);padding:15px;text-align:left;cursor:pointer;min-height:78px;transition:.15s}
+.choice:hover{border-color:#b69bdc;background:#fbf8ff}
+.choice strong{display:block;color:var(--purple-dark);margin-bottom:4px}
+.choice.correct{border-color:#78c49a;background:var(--good-bg)}
+.choice.wrong{border-color:#dc91a4;background:var(--bad-bg)}
+.choice:disabled{cursor:default}
+.feedback{display:none;margin-top:15px;padding:14px 15px;border-radius:13px;line-height:1.55}
+.feedback.show{display:block}.feedback.good{background:var(--good-bg);border:1px solid #c4e6d1;color:#347d59}
+.feedback.bad{background:var(--bad-bg);border:1px solid #f0c9d2;color:#9d4f66}
+.feedback strong{display:block;margin-bottom:3px}
+.final{text-align:center;padding:30px}
+.trophy{font-size:4rem}.score-big{font-size:3.5rem;font-weight:900;color:var(--purple-dark);margin:8px}
+.lesson{text-align:left;max-width:760px;margin:22px auto;background:#faf8fd;border:1px solid var(--line);border-radius:16px;padding:18px;line-height:1.6}
+.lesson h3{margin-top:0;color:var(--purple-dark)}
+.lesson li{margin:7px 0}
+@media(max-width:760px){.intro{grid-template-columns:1fr}.levelbar{grid-template-columns:repeat(5,minmax(0,1fr))}.leveldot{font-size:.68rem;padding:8px 2px}}
+@media(max-width:520px){.app{padding:12px}.choices{grid-template-columns:1fr}.mission-head{display:block}.mission-head .btn{margin-top:12px;width:100%}.device{width:100px;min-height:95px}.visual{gap:8px;padding:13px}.arrow{font-size:1.2rem}.stats{width:100%}.stat{flex:1;min-width:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><h1>🌐 Conecta Seguro</h1><p>Aprende a proteger el Wi-Fi de tu casa, paso a paso.</p></div>
+ <div class="stats">
+  <div class="stat"><b id="score">0</b><span>PUNTOS</span></div>
+  <div class="stat"><b id="level">0/5</b><span>MISIONES</span></div>
+  <div class="stat"><b id="progressText">0%</b><span>PROGRESO</span></div>
+ </div>
+</header>
+
+<section id="intro" class="screen active">
+ <div class="intro">
+  <div class="hero">
+   <div class="hero-art">🏠 📶 🛡️</div>
+   <h2>¡Vamos a proteger una red!</h2>
+   <p>Imagina que tienes una casa con varios dispositivos conectados a Internet. En este juego aprenderás qué hace el router y cómo evitar algunos riesgos comunes.</p>
+   <div class="guide"><strong>¿Cómo se juega?</strong><br>Lee una situación, elige una respuesta y pulsa <b>Comprobar</b>. Si te equivocas, el juego te explicará la respuesta y podrás intentarlo otra vez. ¡No pierdes vidas!</div>
+   <div class="actions"><button class="btn" id="startBtn">🚀 Empezar paso a paso</button></div>
+  </div>
+  <div class="panel">
+   <h2 style="margin-top:0;color:var(--purple-dark)">🎯 Lo que aprenderás</h2>
+   <div class="objectives">
+    <div class="objective"><div>📡</div><div><b>1. Conocer el router</b><span>Entender qué aparato reparte la conexión en casa.</span></div></div>
+    <div class="objective"><div>📱</div><div><b>2. Elegir una conexión</b><span>Saber cuál conviene usar para una actividad importante.</span></div></div>
+    <div class="objective"><div>🔐</div><div><b>3. Crear protección</b><span>Aprender por qué una buena contraseña importa.</span></div></div>
+    <div class="objective"><div>🔎</div><div><b>4. Revisar intrusos</b><span>Qué hacer si aparece un dispositivo desconocido.</span></div></div>
+    <div class="objective"><div>🏆</div><div><b>5. Proteger la casa</b><span>Usar lo aprendido en una situación sencilla.</span></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="game" class="screen">
+ <div class="levelbar" id="levelbar"></div>
+ <div class="panel">
+  <div class="mission-head">
+   <div><h2 id="missionTitle"></h2><p id="missionText"></p></div>
+   <button class="btn secondary" id="restartBtn">↻ Reiniciar</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-label"><span>Tu avance</span><b id="progressLabel">Misión 1 de 5</b></div><div class="progress"><i id="progressBar"></i></div></div>
+  <div id="levelContent"></div>
+  <div id="feedback" class="feedback" aria-live="polite"></div>
+  <div class="actions" id="actionArea"></div>
+ </div>
+</section>
+
+<section id="final" class="screen">
+ <div class="panel final">
+  <div class="trophy">🏆</div><h2>¡Lo conseguiste!</h2>
+  <p>Has terminado las cinco misiones de Conecta Seguro.</p>
+  <div class="score-big" id="finalScore">0</div><p id="finalMessage"></p>
+  <div class="lesson">
+   <h3>🧠 Recuerda estas cinco ideas</h3>
+   <ol>
+    <li>El router conecta tus dispositivos con Internet.</li>
+    <li>Para actividades importantes, usa una conexión de confianza.</li>
+    <li>Protege el Wi-Fi y la administración del router con contraseñas fuertes y diferentes.</li>
+    <li>Si ves un dispositivo desconocido, primero comprueba quién es.</li>
+    <li>Mantén el router actualizado y utiliza una seguridad Wi-Fi moderna, como WPA2 o WPA3 si está disponible.</li>
+   </ol>
+  </div>
+  <button class="btn" id="againBtn">🔁 Jugar de nuevo</button>
+ </div>
+</section>
+</div>
+
+<script>
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id);
+const screens={intro:$("intro"),game:$("game"),final:$("final")};
+const names=["Conoce el router","Elige la conexión","Protege el Wi-Fi","Revisa los dispositivos","Reto final"];
+const lessons=[
+ {title:"Misión 1 · ¿Quién conecta tu casa?",desc:"Primero vamos a reconocer el aparato más importante de una red doméstica.",
+  guide:"El router es el aparato que permite que tus dispositivos se conecten entre sí y salgan a Internet.",
+  visual:true,q:"¿Qué aparato permite que el teléfono, la computadora y la televisión se conecten a Internet en casa?",
+  options:[["phone","📱 El teléfono"],["router","📡 El router"],["tv","📺 La televisión"],["keyboard","⌨️ El teclado"]],
+  answer:"router",explain:"¡Exacto! El router dirige la conexión entre los dispositivos de tu casa e Internet. Piensa en él como una estación que organiza el tráfico de datos."},
+ {title:"Misión 2 · Escoge una conexión confiable",desc:"Ahora imagina que vas a consultar tu cuenta bancaria desde el teléfono.",
+  guide:"Para hacer algo importante, evita redes públicas o desconocidas. Es mejor usar tu red de confianza o tus propios datos móviles.",
+  q:"Vas a consultar tu cuenta bancaria. ¿Qué conexión es la opción más prudente?",
+  options:[["public","☕ Wi-Fi público abierto"],["home","🏠 Wi-Fi de casa que conoces"],["unknown","❓ Una red desconocida que aparece gratis"],["any","🎲 Cualquier red disponible"]],
+  answer:"home",explain:"¡Bien! Una red doméstica conocida y bien protegida suele ser una opción más prudente. También puedes usar tus propios datos móviles. No todas las redes Wi-Fi son igual de confiables."},
+ {title:"Misión 3 · Ponle una buena cerradura al Wi-Fi",desc:"Tu red necesita una contraseña que no sea fácil de adivinar.",
+  guide:"Una contraseña fuerte debe ser difícil de adivinar. No uses datos obvios como 12345678 o tu nombre.",
+  q:"¿Cuál de estas opciones protege mejor la red Wi-Fi?",
+  options:[["simple","🔓 12345678"],["name","🐶 El nombre de mi mascota"],["strong","🔐 Una frase larga y difícil de adivinar, que no uso en otras cuentas"],["blank","🚪 No poner contraseña"]],
+  answer:"strong",explain:"¡Correcto! Una contraseña larga, difícil de adivinar y exclusiva para tu Wi-Fi ayuda a evitar que personas desconocidas se conecten."},
+ {title:"Misión 4 · ¿Quién está conectado?",desc:"En la lista del router aparece un dispositivo que no reconoces.",
+  guide:"Un nombre desconocido no significa automáticamente que sea un intruso. Puede ser un dispositivo de alguien de tu casa. Primero investiga.",
+  q:"Aparece un dispositivo desconocido en tu red. ¿Qué haces primero?",
+  options:[["ignore","🙈 Ignorarlo para siempre"],["share","📣 Publicar la contraseña para preguntar quién es"],["check","🔎 Revisar la lista y preguntar a las personas de casa si reconocen el dispositivo"],["panic","⚡ Apagar todos los aparatos sin comprobar nada"]],
+  answer:"check",explain:"¡Muy bien! Primero verifica. Puede ser un teléfono, una consola o una televisión de alguien de casa. Si nadie lo reconoce, pide ayuda para revisar la configuración del router y cambiar la contraseña del Wi-Fi."},
+ {title:"Misión 5 · El reto de la casa segura",desc:"¡Último paso! Ayuda a una familia a elegir una red mejor protegida.",
+  guide:"Una red segura combina varias medidas: contraseña fuerte, ajustes de seguridad modernos y actualizaciones.",
+  q:"¿Cuál es el mejor plan para cuidar el Wi-Fi de una casa?",
+  options:[["open","🌐 Dejar la red abierta para que todos entren"],["old","🕰️ No cambiar nunca la configuración ni actualizar el router"],["safe","🛡️ Usar contraseña fuerte, seguridad WPA2/WPA3 si está disponible y mantener el router actualizado"],["unknown","❓ Aceptar cualquier dispositivo sin revisarlo"]],
+  answer:"safe",explain:"¡Lo lograste! Una buena red combina varias capas de protección. WPA2 o WPA3 son estándares de seguridad Wi-Fi; las actualizaciones ayudan a corregir problemas del router."}
+];
+let score=0,index=0,answered=false,completed=[];
+function show(name){Object.values(screens).forEach(s=>s.classList.remove("active"));screens[name].classList.add("active")}
+function stats(){
+ $("score").textContent=score;$("level").textContent=completed.length+"/5";
+ const pct=Math.round(completed.length/5*100);$("progressText").textContent=pct+"%";
+}
+function bar(){
+ $("levelbar").innerHTML=names.map((n,i)=>`<div class="leveldot ${i<index?"done":i===index?"active":""}">${i<index?"✓ ":""}${i+1}. ${n}</div>`).join("");
+ $("progressBar").style.width=(index/5*100)+"%";
+ $("progressLabel").textContent=`Misión ${index+1} de 5`;
+}
+function render(){
+ const l=lessons[index];answered=false;bar();$("missionTitle").textContent=l.title;$("missionText").textContent=l.desc;
+ $("feedback").className="feedback";$("feedback").innerHTML="";$("actionArea").innerHTML="";
+ const visual=l.visual?`<div class="visual"><div class="device"><div class="emoji">💻</div><b>Computadora</b><small>Quiere conectarse</small></div><div class="arrow">↔</div><div class="device"><div class="emoji">📡</div><b>Router</b><small>Organiza la conexión</small></div><div class="arrow">↔</div><div class="device"><div class="emoji">🌐</div><b>Internet</b><small>Red mundial</small></div></div>`:"";
+ $("levelContent").innerHTML=`${visual}<div class="guide"><strong>💡 Aprende:</strong> ${l.guide}</div><div class="question">${l.q}</div><div class="choices">${l.options.map(o=>`<button class="choice" data-id="${o[0]}">${o[1]}</button>`).join("")}</div>`;
+ $("levelContent").querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
+  if(answered)return;
+  $("levelContent").querySelectorAll(".choice").forEach(b=>b.classList.remove("correct","wrong","selected"));
+  btn.classList.add("selected");$("actionArea").innerHTML='<button class="btn" id="checkBtn">Comprobar respuesta</button>';
+  $("checkBtn").addEventListener("click",()=>check(btn.dataset.id,btn));
+ }));
+}
+function check(id,btn){
+ if(answered)return;
+ const l=lessons[index],f=$("feedback");
+ if(id===l.answer){
+  answered=true;btn.classList.remove("selected");btn.classList.add("correct");
+  if(!completed.includes(index)){score+=200;completed.push(index)}
+  stats();f.className="feedback show good";f.innerHTML=`<strong>✅ ¡Muy bien!</strong>${l.explain}`;
+  $("levelContent").querySelectorAll(".choice").forEach(b=>b.disabled=true);
+  $("actionArea").innerHTML=`<button class="btn good" id="nextBtn">${index===4?"Terminar juego 🏆":"Siguiente misión →"}</button>`;
+  $("nextBtn").addEventListener("click",()=>{if(index<4){index++;render()}else finish()});
+ }else{
+  btn.classList.remove("selected");btn.classList.add("wrong");
+  f.className="feedback show bad";f.innerHTML="<strong>¡Casi! Inténtalo otra vez.</strong>Lee la pista morada y vuelve a elegir. No pierdes puntos ni vidas.";
+  $("actionArea").innerHTML='<button class="btn secondary" id="retryBtn">Volver a intentarlo</button>';
+  $("retryBtn").addEventListener("click",()=>{btn.classList.remove("wrong");$("feedback").className="feedback";$("feedback").innerHTML="";$("actionArea").innerHTML="";});
+ }
+}
+function finish(){
+ $("progressBar").style.width="100%";show("final");$("finalScore").textContent=score;
+ $("finalMessage").textContent=score===1000?"¡Perfecto! Has completado todas las misiones.": "¡Buen trabajo! Has terminado el recorrido y aprendido cómo cuidar una red doméstica.";
+}
+function reset(){score=0;index=0;completed=[];stats();show("intro");}
+$("startBtn").addEventListener("click",()=>{reset();show("game");render()});
+$("restartBtn").addEventListener("click",()=>{reset();show("game");render()});
+$("againBtn").addEventListener("click",()=>{reset();show("game");render()});
+stats();
+})();
+</script>
+</body>
+</html>
